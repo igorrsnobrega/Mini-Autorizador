@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.miniautorizador.domain.Cartao;
 import br.com.miniautorizador.domain.Transacao;
 import br.com.miniautorizador.dto.TransacaoDTO;
+import br.com.miniautorizador.exception.TransacaoException;
 import br.com.miniautorizador.repository.TransacaoRepository;
 import lombok.AllArgsConstructor;
 
@@ -21,39 +22,40 @@ public class TransacaoService {
     private final CartaoService cartaoService;
 
 
-    private void validTransacao(TransacaoDTO transacaoDTO) {
+    private void validTransacao(TransacaoDTO transacaoDTO) throws TransacaoException {
         Optional<Cartao> cartaoOptional = cartaoService.findByNumeroCartao(transacaoDTO.getNumeroCartao());
 
         if (cartaoOptional.isEmpty()) {
-            throw new IllegalArgumentException("CARTAO_INVALIDO");
+            throw new TransacaoException("CARTAO_INVALIDO");
         }
 
         Cartao cartao = cartaoOptional.get();
 
         if (!cartao.getSenhaCartao().equals(transacaoDTO.getSenhaCartao())) {
-            throw new IllegalArgumentException("SENHA_INVALIDA");
+            throw new TransacaoException("SENHA_INVALIDA");
         }
 
         BigDecimal valor = transacaoDTO.getValor();
         BigDecimal saldo = cartao.getSaldoCartao();
 
         if (valor.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("VALOR_INCORRETO");
+            throw new TransacaoException("VALOR_INCORRETO");
         }
 
         if (saldo.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("SALDO_INSUFICIENTE");
+            throw new TransacaoException("SALDO_INSUFICIENTE");
         }
 
         if (valor.compareTo(saldo) > 0) {
-            throw new IllegalArgumentException("SALDO_INSUFICIENTE");
+            throw new TransacaoException("SALDO_INSUFICIENTE");
+
         }
 
         cartao.setSaldoCartao(saldo.subtract(valor));
     }
 
 
-    public Transacao doTransacao(TransacaoDTO transacaoDTO) {
+    public String doTransacao(TransacaoDTO transacaoDTO) throws TransacaoException {
 
         validTransacao(transacaoDTO);
 
@@ -65,9 +67,9 @@ public class TransacaoService {
 
         BeanUtils.copyProperties(transacaoDTO, transacao);
 
-        return  transacaoRepository.save(transacao);
+        transacaoRepository.save(transacao);
 
-
+        return "OK";
     }
 
 }
