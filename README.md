@@ -13,7 +13,6 @@ Maven
 Para executar a aplicação, é necessário ter o Java 11 e o Maven instalados.
 
 ## Clone o repositório
-Na raiz do projeto, execute o seguinte comando: `mvn spring-boot:run`
 A aplicação estará disponível na URL `http://localhost:8080`.
 
 ## Endpoints
