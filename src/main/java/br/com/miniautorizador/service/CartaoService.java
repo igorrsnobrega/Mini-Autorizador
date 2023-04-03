@@ -22,34 +22,26 @@ public class CartaoService {
     }
 
     public CartaoDTO save(CartaoDTO cartaoDTO) {
-
         Optional<Cartao> hasCartao = findCartaoExists(cartaoDTO.getNumeroCartao());
 
         if (hasCartao.isPresent()) {
+            Cartao cartao = hasCartao.get();
 
-            hasCartao.map(cartao -> {
+            CartaoDTO newCartaoDTO = new CartaoDTO();
+            newCartaoDTO.setNumeroCartao(cartao.getNumeroCartao());
+            newCartaoDTO.setSenhaCartao(cartao.getSenhaCartao());
 
-                CartaoDTO newCartaoDTO = new CartaoDTO();
-
-                newCartaoDTO.setNumeroCartao(cartao.getNumeroCartao());
-                newCartaoDTO.setSenhaCartao(cartao.getSenhaCartao());
-
-                return newCartaoDTO;
-            });
-
+            return newCartaoDTO;
         } else {
-
             Cartao newCartao = new Cartao();
-
             newCartao.setNumeroCartao(cartaoDTO.getNumeroCartao());
             newCartao.setSenhaCartao(cartaoDTO.getSenhaCartao());
 
             cartaoRepository.save(newCartao);
-
+            return cartaoDTO;
         }
-
-        return cartaoDTO;
     }
+
 
     public BigDecimal findSaldoCartao(String numeroCartao) {
         Optional<Cartao> hasCartao = findCartaoExists(numeroCartao);
