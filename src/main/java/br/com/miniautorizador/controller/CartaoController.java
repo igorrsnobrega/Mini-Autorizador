@@ -25,22 +25,18 @@ public class CartaoController {
     private final CartaoService cartaoService;
 
     @PostMapping
-    public ResponseEntity<Cartao> saveCartao(@RequestBody CartaoDTO cartaoDTO) {
+    public ResponseEntity<CartaoDTO> saveCartao(@RequestBody CartaoDTO cartaoDTO) {
 
-        Optional<Cartao> hasCartao = cartaoService.beforeSave(cartaoDTO.getNumeroCartao());
+        Optional<Cartao> hasCartao = cartaoService.findCartaoExists(cartaoDTO.getNumeroCartao());
 
-        return hasCartao.map(cartao -> new ResponseEntity<>(cartao, HttpStatus.UNPROCESSABLE_ENTITY))
+        return hasCartao.map(cartao -> new ResponseEntity<>(cartaoDTO, HttpStatus.UNPROCESSABLE_ENTITY))
                 .orElseGet(() -> new ResponseEntity<>(cartaoService.save(cartaoDTO), HttpStatus.CREATED));
 
     }
 
     @GetMapping("/{numeroCartao}")
     public ResponseEntity<BigDecimal> findSaldoCartao(@PathVariable String numeroCartao) {
-
-        Optional<Cartao> hasCartao = cartaoService.beforeSave(numeroCartao);
-
-        return hasCartao.map(cartao -> new ResponseEntity<>(cartaoService.findSaldoCartao(numeroCartao),HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return new ResponseEntity<>(cartaoService.findSaldoCartao(numeroCartao),HttpStatus.OK);
     }
 
 }

@@ -23,13 +23,8 @@ public class TransacaoService {
 
 
     private void validTransacao(TransacaoDTO transacaoDTO) throws TransacaoException {
-        Optional<Cartao> cartaoOptional = cartaoService.findByNumeroCartao(transacaoDTO.getNumeroCartao());
-
-        if (cartaoOptional.isEmpty()) {
-            throw new TransacaoException("CARTAO_INVALIDO");
-        }
-
-        Cartao cartao = cartaoOptional.get();
+        Cartao cartao = cartaoService.findCartaoExists(transacaoDTO.getNumeroCartao())
+                .orElseThrow(() -> new TransacaoException("CARTAO_INVALIDO"));
 
         if (!cartao.getSenhaCartao().equals(transacaoDTO.getSenhaCartao())) {
             throw new TransacaoException("SENHA_INVALIDA");
@@ -48,11 +43,11 @@ public class TransacaoService {
 
         if (valor.compareTo(saldo) > 0) {
             throw new TransacaoException("SALDO_INSUFICIENTE");
-
         }
 
         cartao.setSaldoCartao(saldo.subtract(valor));
     }
+
 
 
     public String doTransacao(TransacaoDTO transacaoDTO) throws TransacaoException {
@@ -61,7 +56,7 @@ public class TransacaoService {
 
         Transacao transacao = new Transacao();
 
-        Optional<Cartao> cartao = cartaoService.findByNumeroCartao(transacaoDTO.getNumeroCartao());
+        Optional<Cartao> cartao = cartaoService.findCartaoExists(transacaoDTO.getNumeroCartao());
 
         transacao.setCartao(cartao.get());
 

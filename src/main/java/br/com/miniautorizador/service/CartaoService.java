@@ -3,7 +3,6 @@ package br.com.miniautorizador.service;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import br.com.miniautorizador.domain.Cartao;
@@ -17,25 +16,56 @@ public class CartaoService {
 
     private final CartaoRepository cartaoRepository;
 
-    public Optional<Cartao> beforeSave(String numeroCartao) {
-        return cartaoRepository.findByNumeroCartao(numeroCartao);
+    public Optional<Cartao> findCartaoExists(String numeroCartao) {
+        return Optional.ofNullable(cartaoRepository.findByNumeroCartao(numeroCartao));
     }
 
-    public Cartao save(CartaoDTO cartaoDTO) {
+    public CartaoDTO save(CartaoDTO cartaoDTO) {
 
-        Cartao newCartao = new Cartao();
-        BeanUtils.copyProperties(cartaoDTO, newCartao);
+        Optional<Cartao> hasCartao = findCartaoExists(cartaoDTO.getNumeroCartao());
 
-        return cartaoRepository.save(newCartao);
+        if (hasCartao.isPresent()) {
+
+            hasCartao.map(cartao -> {
+
+                CartaoDTO newCartaoDTO = new CartaoDTO();
+
+                newCartaoDTO.setNumeroCartao(cartao.getNumeroCartao());
+                newCartaoDTO.setSenhaCartao(cartao.getSenhaCartao());
+
+                return newCartaoDTO;
+            });
+
+        } else {
+
+            Cartao newCartao = new Cartao();
+
+            newCartao.setNumeroCartao(cartaoDTO.getNumeroCartao());
+            newCartao.setSenhaCartao(cartaoDTO.getSenhaCartao());
+
+            cartaoRepository.save(newCartao);
+
+        }
+
+        return cartaoDTO;
+
+
     }
 
-    public Optional<Cartao> findByNumeroCartao(String numeroCartao) {
-        return cartaoRepository.findByNumeroCartao(numeroCartao);
-    }
+//    public CartaoDTO findByNumeroCartao(String numeroCartao) {
+//
+//        Cartao cartao = cartaoRepository.findByNumeroCartao(numeroCartao);
+//
+//        CartaoDTO cartaoDTO = new CartaoDTO();
+//
+//        BeanUtils.copyProperties(cartao, cartaoDTO);
+//
+//        return cartaoDTO;
+//    }
 
     public BigDecimal findSaldoCartao(String numeroCartao) {
-        Optional<Cartao> hasCartao = cartaoRepository.findByNumeroCartao(numeroCartao);
-        return hasCartao.get().getSaldoCartao();
+        Cartao cartao = cartaoRepository.findByNumeroCartao(numeroCartao);
+        return cartao.getSaldoCartao();
     }
 
 }
