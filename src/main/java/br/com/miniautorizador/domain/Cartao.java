@@ -21,9 +21,9 @@ public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull(message = "Numero cartao e obrigatorio")
+    @NotNull(message = "O número do cartão é obrigatório.")
     private String numeroCartao;
-    @NotNull(message = "A senha e obrigatoria")
+    @NotNull(message = "A senha é obrigatória.")
     private String senhaCartao;
     private BigDecimal saldoCartao = BigDecimal.valueOf(500);
 
