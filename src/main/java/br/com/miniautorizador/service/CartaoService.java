@@ -52,17 +52,6 @@ public class CartaoService {
 
     }
 
-//    public CartaoDTO findByNumeroCartao(String numeroCartao) {
-//
-//        Cartao cartao = cartaoRepository.findByNumeroCartao(numeroCartao);
-//
-//        CartaoDTO cartaoDTO = new CartaoDTO();
-//
-//        BeanUtils.copyProperties(cartao, cartaoDTO);
-//
-//        return cartaoDTO;
-//    }
-
     public BigDecimal findSaldoCartao(String numeroCartao) {
         Cartao cartao = cartaoRepository.findByNumeroCartao(numeroCartao);
         return cartao.getSaldoCartao();
