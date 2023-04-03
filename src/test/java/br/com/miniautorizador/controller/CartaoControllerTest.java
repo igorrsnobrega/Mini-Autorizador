@@ -76,7 +76,7 @@ public class CartaoControllerTest {
 
         assertThrows(CartaoInvalidoException.class, () -> {
             cartaoService.findSaldoCartao(numeroCartao);
-});
+        });
     }
 
 }

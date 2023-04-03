@@ -3,7 +3,6 @@ package br.com.miniautorizador.service;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import br.com.miniautorizador.domain.Cartao;
@@ -63,8 +62,7 @@ public class TransacaoService {
         Optional<Cartao> cartao = cartaoService.findCartaoExists(transacaoDTO.getNumeroCartao());
 
         transacao.setCartao(cartao.get());
-
-        BeanUtils.copyProperties(transacaoDTO, transacao);
+        transacao.setValor(transacaoDTO.getValor());
 
         transacaoRepository.save(transacao);
 
