@@ -26,9 +26,9 @@ public class Transacao {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "id_cartao")
-    @NotNull(message = "O Cartao e obrigatorio")
+    @NotNull(message = "O número do cartão é obrigatório.")
     private Cartao cartao;
-    @NotNull(message = "O valor e obrigatorio")
+    @NotNull(message = "O valor é obrigatório.")
     private BigDecimal valor;
     private LocalDateTime dataTransacao = LocalDateTime.now();
 

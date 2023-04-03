@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 
 import br.com.miniautorizador.domain.Cartao;
 import br.com.miniautorizador.dto.CartaoDTO;
-import br.com.miniautorizador.exception.CartaoException;
+import br.com.miniautorizador.exception.CartaoInvalidoException;
 import br.com.miniautorizador.service.CartaoService;
 
 import static org.junit.Assert.assertThrows;
@@ -72,9 +72,9 @@ public class CartaoControllerTest {
     public void testFindSaldoCartaoWithNonExistingCartao() {
 
         String numeroCartao = "1234567890123456";
-        when(cartaoService.findSaldoCartao(numeroCartao)).thenThrow(new CartaoException("CARTAO_INVALIDO"));
+        when(cartaoService.findSaldoCartao(numeroCartao)).thenThrow(new CartaoInvalidoException());
 
-        assertThrows(CartaoException.class, () -> {
+        assertThrows(CartaoInvalidoException.class, () -> {
             cartaoService.findSaldoCartao(numeroCartao);
 });
     }
