@@ -9,7 +9,11 @@ import org.springframework.stereotype.Service;
 import br.com.miniautorizador.domain.Cartao;
 import br.com.miniautorizador.domain.Transacao;
 import br.com.miniautorizador.dto.TransacaoDTO;
+import br.com.miniautorizador.exception.CartaoInvalidoException;
+import br.com.miniautorizador.exception.SaldoInsuficienteException;
+import br.com.miniautorizador.exception.SenhaInvalidaException;
 import br.com.miniautorizador.exception.TransacaoException;
+import br.com.miniautorizador.exception.ValorIncorretoException;
 import br.com.miniautorizador.repository.TransacaoRepository;
 import lombok.AllArgsConstructor;
 
@@ -22,27 +26,27 @@ public class TransacaoService {
     private final CartaoService cartaoService;
 
 
-    private void validTransacao(TransacaoDTO transacaoDTO) throws TransacaoException {
+    private void validTransacao(TransacaoDTO transacaoDTO)  {
         Cartao cartao = cartaoService.findCartaoExists(transacaoDTO.getNumeroCartao())
-                .orElseThrow(() -> new TransacaoException("CARTAO_INVALIDO"));
+                .orElseThrow(CartaoInvalidoException::new);
 
         if (!cartao.getSenhaCartao().equals(transacaoDTO.getSenhaCartao())) {
-            throw new TransacaoException("SENHA_INVALIDA");
+            throw new SenhaInvalidaException();
         }
 
         BigDecimal valor = transacaoDTO.getValor();
         BigDecimal saldo = cartao.getSaldoCartao();
 
         if (valor.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new TransacaoException("VALOR_INCORRETO");
+            throw new ValorIncorretoException();
         }
 
         if (saldo.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new TransacaoException("SALDO_INSUFICIENTE");
+            throw new SaldoInsuficienteException();
         }
 
         if (valor.compareTo(saldo) > 0) {
-            throw new TransacaoException("SALDO_INSUFICIENTE");
+            throw new SaldoInsuficienteException();
         }
 
         cartao.setSaldoCartao(saldo.subtract(valor));

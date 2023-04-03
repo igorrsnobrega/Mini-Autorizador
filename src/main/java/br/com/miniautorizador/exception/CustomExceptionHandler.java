@@ -9,14 +9,27 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class CustomExceptionHandler {
     @ExceptionHandler(TransacaoException.class)
     public ResponseEntity<String> handleCustomException(TransacaoException ex) {
-        String errorResponse = ex.getMessage();
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("TRANSACAO_INVALIDA");
     }
 
-    @ExceptionHandler(CartaoException.class)
-    public ResponseEntity<String> handleCustomException(CartaoException ex) {
-        String errorResponse = ex.getMessage();
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
+    @ExceptionHandler(CartaoInvalidoException.class)
+    public ResponseEntity<String> handleCustomException(CartaoInvalidoException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("CARTAO_INVALIDO");
+    }
+
+    @ExceptionHandler(SenhaInvalidaException.class)
+    public ResponseEntity<String> handleCustomException(SenhaInvalidaException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("SENHA_INVALIDA");
+    }
+
+    @ExceptionHandler(ValorIncorretoException.class)
+    public ResponseEntity<String> handleCustomException(ValorIncorretoException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("SALDO_INSUFICIENTE");
+    }
+
+    @ExceptionHandler(SaldoInsuficienteException.class)
+    public ResponseEntity<String> handleCustomException(SaldoInsuficienteException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("SALDO_INSUFICIENTE");
     }
 }
 

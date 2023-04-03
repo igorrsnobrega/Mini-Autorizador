@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.miniautorizador.domain.Cartao;
 import br.com.miniautorizador.dto.CartaoDTO;
-import br.com.miniautorizador.exception.CartaoException;
+import br.com.miniautorizador.exception.CartaoInvalidoException;
 import br.com.miniautorizador.repository.CartaoRepository;
 import lombok.AllArgsConstructor;
 
@@ -45,7 +45,7 @@ public class CartaoService {
 
     public BigDecimal findSaldoCartao(String numeroCartao) {
         Optional<Cartao> hasCartao = findCartaoExists(numeroCartao);
-        return hasCartao.map(Cartao::getSaldoCartao).orElseThrow(() -> new CartaoException("CARTAO_INVALIDO"));
+        return hasCartao.map(Cartao::getSaldoCartao).orElseThrow(CartaoInvalidoException::new);
     }
 
 }
