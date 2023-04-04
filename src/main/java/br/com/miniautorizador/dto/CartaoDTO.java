@@ -12,5 +12,5 @@ public class CartaoDTO {
     @NotNull(message = "O número do cartão é obrigatório.")
     private String numeroCartao;
     @NotNull(message = "A senha é obrigatória.")
-    private String senhaCartao;
+    private String senha;
 }

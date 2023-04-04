@@ -29,13 +29,13 @@ public class CartaoService {
 
             CartaoDTO newCartaoDTO = new CartaoDTO();
             newCartaoDTO.setNumeroCartao(cartao.getNumeroCartao());
-            newCartaoDTO.setSenhaCartao(cartao.getSenhaCartao());
+            newCartaoDTO.setSenha(cartao.getSenha());
 
             return newCartaoDTO;
         } else {
             Cartao newCartao = new Cartao();
             newCartao.setNumeroCartao(cartaoDTO.getNumeroCartao());
-            newCartao.setSenhaCartao(cartaoDTO.getSenhaCartao());
+            newCartao.setSenha(cartaoDTO.getSenha());
 
             cartaoRepository.save(newCartao);
             return cartaoDTO;

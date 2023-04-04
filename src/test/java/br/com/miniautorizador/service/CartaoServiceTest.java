@@ -61,11 +61,11 @@ public class CartaoServiceTest {
 
         CartaoDTO cartaoDTO = new CartaoDTO();
         cartaoDTO.setNumeroCartao("1234567890123456");
-        cartaoDTO.setSenhaCartao("1234");
+        cartaoDTO.setSenha("1234");
 
         Cartao cartao = new Cartao();
         cartao.setNumeroCartao("1234567890123456");
-        cartao.setSenhaCartao("1234");
+        cartao.setSenha("1234");
 
         when(cartaoRepository.findByNumeroCartao(any())).thenReturn(cartao);
 
@@ -73,7 +73,7 @@ public class CartaoServiceTest {
 
         assertNotNull(result);
         assertEquals("1234567890123456", result.getNumeroCartao());
-        assertEquals("1234", result.getSenhaCartao());
+        assertEquals("1234", result.getSenha());
     }
 
     @Test
@@ -81,10 +81,10 @@ public class CartaoServiceTest {
 
         CartaoDTO cartaoDTO = new CartaoDTO();
         cartaoDTO.setNumeroCartao("1234567890123456");
-        cartaoDTO.setSenhaCartao("1234");
+        cartaoDTO.setSenha("1234");
 
         Cartao cartao = new Cartao();
-        cartao.setSenhaCartao(cartaoDTO.getSenhaCartao());
+        cartao.setSenha(cartaoDTO.getSenha());
         cartao.setNumeroCartao(cartaoDTO.getNumeroCartao());
 
         when(cartaoRepository.findByNumeroCartao(any())).thenReturn(null);
@@ -93,7 +93,7 @@ public class CartaoServiceTest {
 
         assertNotNull(result);
         assertEquals("1234567890123456", result.getNumeroCartao());
-        assertEquals("1234", result.getSenhaCartao());
+        assertEquals("1234", result.getSenha());
 
         verify(cartaoRepository).save(cartao);
     }

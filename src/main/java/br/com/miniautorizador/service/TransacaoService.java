@@ -29,7 +29,7 @@ public class TransacaoService {
         Cartao cartao = cartaoService.findCartaoExists(transacaoDTO.getNumeroCartao())
                 .orElseThrow(CartaoInvalidoException::new);
 
-        if (!cartao.getSenhaCartao().equals(transacaoDTO.getSenhaCartao())) {
+        if (!cartao.getSenha().equals(transacaoDTO.getSenhaCartao())) {
             throw new SenhaInvalidaException();
         }
 

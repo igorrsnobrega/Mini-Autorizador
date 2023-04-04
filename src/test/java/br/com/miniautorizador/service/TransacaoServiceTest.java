@@ -45,7 +45,7 @@ public class TransacaoServiceTest {
 
         cartao = new Cartao();
         cartao.setNumeroCartao(transacaoDTO.getNumeroCartao());
-        cartao.setSenhaCartao(transacaoDTO.getSenhaCartao());
+        cartao.setSenha(transacaoDTO.getSenhaCartao());
         cartao.setSaldoCartao(new BigDecimal("100.00"));
     }
 
